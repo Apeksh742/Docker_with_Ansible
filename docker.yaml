@@ -1,0 +1,49 @@
+- hosts: all
+  tasks:
+    - name: Yum repolist for Docker
+      yum_repository:
+        name: docker
+        description: yum repository for docker
+        baseurl: https://download.docker.com/linux/centos/7/x86_64/stable/
+        gpgcheck: no
+
+    - name: Package Installer For Docker
+      package:
+        name: docker-ce-3:18.09.1-3.el7
+        state: present
+
+    - name: Package Installer For Python3 
+      package:
+        name: python3
+        state: present
+
+    - name: Installing python library for the Docker Remote API
+      pip:
+        name: docker-py
+
+    - name: Start service docker
+      service:
+        name: docker
+        state: started
+
+    - name: Copy Html Code to web server
+      copy:
+        src: ./webPage/
+        dest: /home/Web/
+
+    - name: Create a web container
+      docker_container:
+        name: web
+        image: httpd
+        ports:
+          - "80:80"
+        volumes:
+          - /home/Web:/usr/local/apache2/htdocs/
+      register: x
+
+    - debug:
+        var: x
+          
+
+
+
