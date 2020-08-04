@@ -39,10 +39,10 @@
           - "80:80"
         volumes:
           - /home/Web:/usr/local/apache2/htdocs/
-      register: x
+      register: status
 
     - debug:
-        var: x
+        var: status
           
 
 
